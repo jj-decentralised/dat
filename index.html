@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treasury Analytics Dashboard</title>
+  <title>Treasury Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
+
   <header class="header">
     <div class="header-left">
       <h1 class="logo">Treasury Analytics</h1>
-      <span class="logo-sub">Crypto Treasury Companies Dashboard</span>
+      <span class="logo-sub">Crypto Treasury Companies</span>
     </div>
     <div class="header-right">
       <div class="api-key-section">
-        <label for="apiKeyInput">Massive.com API Key:</label>
-        <input type="password" id="apiKeyInput" placeholder="Enter API key..." />
-        <button id="apiKeyBtn" class="btn btn-sm">Connect</button>
-        <span id="apiStatus" class="api-status">Disconnected</span>
+        <label>API Key</label>
+        <input type="password" id="apiKeyInput" placeholder="massive.com key" />
+        <button id="apiKeyBtn" class="btn btn-sm btn-primary">Connect</button>
+        <span id="apiStatus" class="api-status">offline</span>
       </div>
     </div>
   </header>
@@ -34,65 +36,90 @@
     <button class="tab" data-tab="solana">Solana</button>
   </nav>
 
-  <!-- Overview Tab -->
+  <!-- ============ OVERVIEW ============ -->
   <div id="tab-overview" class="tab-content active">
     <div class="summary-cards">
       <div class="card summary-card">
-        <div class="card-label">Total Companies</div>
+        <div class="card-label">Companies</div>
         <div class="card-value" id="totalCompanies">--</div>
       </div>
       <div class="card summary-card">
-        <div class="card-label">Total BTC Held</div>
+        <div class="card-label">BTC Held</div>
         <div class="card-value" id="totalBTC">--</div>
-        <div class="card-sub" id="totalBTCValue">--</div>
+        <div class="card-sub" id="totalBTCValue"></div>
       </div>
       <div class="card summary-card">
-        <div class="card-label">Total ETH Held</div>
+        <div class="card-label">ETH Held</div>
         <div class="card-value" id="totalETH">--</div>
-        <div class="card-sub" id="totalETHValue">--</div>
+        <div class="card-sub" id="totalETHValue"></div>
       </div>
       <div class="card summary-card">
-        <div class="card-label">Total SOL Held</div>
+        <div class="card-label">SOL Held</div>
         <div class="card-value" id="totalSOL">--</div>
-        <div class="card-sub" id="totalSOLValue">--</div>
+        <div class="card-sub" id="totalSOLValue"></div>
       </div>
       <div class="card summary-card">
-        <div class="card-label">Aggregate Market Cap</div>
+        <div class="card-label">Agg. Market Cap</div>
         <div class="card-value" id="aggMarketCap">--</div>
       </div>
       <div class="card summary-card">
-        <div class="card-label">Aggregate Crypto NAV</div>
+        <div class="card-label">Crypto NAV</div>
         <div class="card-value" id="aggCryptoNAV">--</div>
       </div>
       <div class="card summary-card highlight">
-        <div class="card-label">Aggregate mNAV</div>
+        <div class="card-label">mNAV</div>
         <div class="card-value" id="aggMNAV">--</div>
-        <div class="card-sub">Market Cap / Crypto NAV</div>
       </div>
       <div class="card summary-card">
-        <div class="card-label">Aggregate Premium</div>
+        <div class="card-label">Premium</div>
         <div class="card-value" id="aggPremium">--</div>
-        <div class="card-sub">Market Cap - Crypto NAV</div>
       </div>
     </div>
 
-    <div class="chart-row">
-      <div class="chart-container card">
+    <!-- HERO: Market Cap Over Time -->
+    <div class="chart-row" style="margin-bottom:12px">
+      <div class="chart-panel hero">
         <div class="chart-header">
-          <h3>Aggregate Market Cap vs Crypto NAV</h3>
+          <h3>Crypto Treasury Companies: Market Cap</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="overviewMcapNav" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="overviewMcapNav" data-type="csv">CSV</button>
+            <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-muted);cursor:pointer">
+              <input type="checkbox" id="mcapIndexToggle" style="accent-color:var(--accent)" />
+              Index 100
+            </label>
+            <div class="period-pills" id="mcapPeriodPills">
+              <button class="period-pill" data-days="7">D</button>
+              <button class="period-pill" data-days="30">W</button>
+              <button class="period-pill active" data-days="90">M</button>
+              <button class="period-pill" data-days="180">Q</button>
+              <button class="period-pill" data-days="365">Y</button>
+              <button class="period-pill" data-days="1095">MAX</button>
+            </div>
+            <button class="btn-export" data-chart="mcapOverTime" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="mcapOverTime" data-type="csv">CSV</button>
+          </div>
+        </div>
+        <canvas id="chart-mcapOverTime"></canvas>
+        <div class="chart-legend" id="mcapLegend"></div>
+      </div>
+    </div>
+
+    <div class="chart-row" style="margin-bottom:12px">
+      <div class="chart-panel">
+        <div class="chart-header">
+          <h3>Market Cap vs Crypto NAV</h3>
+          <div class="chart-actions">
+            <button class="btn-export" data-chart="overviewMcapNav" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="overviewMcapNav" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-overviewMcapNav"></canvas>
       </div>
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
           <h3>mNAV by Company</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="overviewMnavCompany" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="overviewMnavCompany" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="overviewMnavCompany" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="overviewMnavCompany" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-overviewMnavCompany"></canvas>
@@ -100,12 +127,12 @@
     </div>
 
     <div class="chart-row">
-      <div class="chart-container card full-width">
+      <div class="chart-panel full-width">
         <div class="chart-header">
           <h3>All Treasury Companies</h3>
           <div class="chart-actions">
-            <input type="text" id="companySearch" placeholder="Search companies..." class="search-input" />
-            <button class="btn btn-sm btn-export" data-chart="overviewTable" data-type="csv">Export CSV</button>
+            <input type="text" id="companySearch" placeholder="Search..." class="search-input" />
+            <button class="btn-export" data-chart="overviewTable" data-type="csv">CSV</button>
           </div>
         </div>
         <div class="table-wrapper">
@@ -122,8 +149,8 @@
                 <th data-sort="sol" class="num">SOL</th>
                 <th data-sort="cryptoNav" class="num">Crypto NAV</th>
                 <th data-sort="mnav" class="num">mNAV</th>
-                <th data-sort="premium" class="num">Premium %</th>
-                <th data-sort="change" class="num">24h Change</th>
+                <th data-sort="premium" class="num">Premium</th>
+                <th data-sort="change" class="num">24h</th>
               </tr>
             </thead>
             <tbody id="companiesTableBody"></tbody>
@@ -133,67 +160,65 @@
     </div>
   </div>
 
-  <!-- Market Data Tab -->
+  <!-- ============ MARKET DATA ============ -->
   <div id="tab-market-data" class="tab-content">
     <div class="controls-row">
       <div class="control-group">
-        <label>Time Period:</label>
+        <label>Period</label>
         <select id="marketTimePeriod">
-          <option value="7">1 Week</option>
-          <option value="30" selected>1 Month</option>
-          <option value="90">3 Months</option>
-          <option value="180">6 Months</option>
-          <option value="365">1 Year</option>
+          <option value="7">1W</option>
+          <option value="30" selected>1M</option>
+          <option value="90">3M</option>
+          <option value="180">6M</option>
+          <option value="365">1Y</option>
         </select>
       </div>
       <div class="control-group">
-        <label>Companies:</label>
-        <select id="marketCompanySelect" multiple>
-        </select>
+        <label>Companies</label>
+        <select id="marketCompanySelect" multiple></select>
       </div>
-      <button id="marketLoadBtn" class="btn">Load Data</button>
+      <button id="marketLoadBtn" class="btn btn-primary btn-sm">Load</button>
     </div>
 
-    <div class="chart-row">
-      <div class="chart-container card">
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
         <div class="chart-header">
-          <h3>Stock Price Performance (Indexed to 100)</h3>
+          <h3>Price Performance (Indexed 100)</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="marketPrice" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="marketPrice" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="marketPrice" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="marketPrice" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-marketPrice"></canvas>
       </div>
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
-          <h3>Trading Volume</h3>
+          <h3>Avg Daily Volume</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="marketVolume" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="marketVolume" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="marketVolume" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="marketVolume" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-marketVolume"></canvas>
       </div>
     </div>
-
     <div class="chart-row">
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
           <h3>Market Cap Comparison</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="marketCap" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="marketCap" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="marketCap" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="marketCap" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-marketCap"></canvas>
       </div>
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
-          <h3>Daily Returns Distribution</h3>
+          <h3>Period Returns</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="marketReturns" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="marketReturns" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="marketReturns" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="marketReturns" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-marketReturns"></canvas>
@@ -201,7 +226,7 @@
     </div>
   </div>
 
-  <!-- Crypto Holdings Tab -->
+  <!-- ============ CRYPTO HOLDINGS ============ -->
   <div id="tab-crypto-holdings" class="tab-content">
     <div class="summary-cards">
       <div class="card summary-card">
@@ -222,46 +247,45 @@
       </div>
     </div>
 
-    <div class="chart-row">
-      <div class="chart-container card">
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
         <div class="chart-header">
-          <h3>Holdings Value Composition</h3>
+          <h3>Holdings Composition</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="holdingsComposition" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="holdingsComposition" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="holdingsComposition" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="holdingsComposition" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-holdingsComposition"></canvas>
       </div>
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
-          <h3>Premium / Discount to NAV by Company</h3>
+          <h3>Premium / Discount to NAV</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="holdingsPremium" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="holdingsPremium" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="holdingsPremium" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="holdingsPremium" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-holdingsPremium"></canvas>
       </div>
     </div>
-
     <div class="chart-row">
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
-          <h3>Crypto Holdings by Company (USD Value)</h3>
+          <h3>Holdings by Company (USD)</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="holdingsByCompany" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="holdingsByCompany" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="holdingsByCompany" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="holdingsByCompany" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-holdingsByCompany"></canvas>
       </div>
-      <div class="chart-container card">
+      <div class="chart-panel">
         <div class="chart-header">
           <h3>Aggregate Holdings Over Time</h3>
           <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="holdingsOverTime" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="holdingsOverTime" data-type="csv">CSV</button>
+            <button class="btn-export" data-chart="holdingsOverTime" data-type="jpeg">JPEG</button>
+            <button class="btn-export" data-chart="holdingsOverTime" data-type="csv">CSV</button>
           </div>
         </div>
         <canvas id="chart-holdingsOverTime"></canvas>
@@ -269,305 +293,127 @@
     </div>
   </div>
 
-  <!-- Bitcoin Tab -->
+  <!-- ============ BITCOIN ============ -->
   <div id="tab-bitcoin" class="tab-content">
     <div class="summary-cards">
-      <div class="card summary-card btc">
-        <div class="card-label">Total BTC Held</div>
-        <div class="card-value" id="btcTotalHeld">--</div>
-      </div>
-      <div class="card summary-card btc">
-        <div class="card-label">BTC Price</div>
-        <div class="card-value" id="btcPrice">--</div>
-      </div>
-      <div class="card summary-card btc">
-        <div class="card-label">Total BTC Value</div>
-        <div class="card-value" id="btcTotalValue">--</div>
-      </div>
-      <div class="card summary-card btc">
-        <div class="card-label">Companies Holding BTC</div>
-        <div class="card-value" id="btcCompanyCount">--</div>
-      </div>
+      <div class="card summary-card btc"><div class="card-label">Total BTC Held</div><div class="card-value" id="btcTotalHeld">--</div></div>
+      <div class="card summary-card btc"><div class="card-label">BTC Price</div><div class="card-value" id="btcPrice">--</div></div>
+      <div class="card summary-card btc"><div class="card-label">Total BTC Value</div><div class="card-value" id="btcTotalValue">--</div></div>
+      <div class="card summary-card btc"><div class="card-label">Holders</div><div class="card-value" id="btcCompanyCount">--</div></div>
     </div>
-
-    <div class="chart-row">
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>BTC Holdings by Company</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="btcHoldings" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="btcHoldings" data-type="csv">CSV</button>
-          </div>
-        </div>
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
+        <div class="chart-header"><h3>BTC Holdings by Company</h3><div class="chart-actions"><button class="btn-export" data-chart="btcHoldings" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="btcHoldings" data-type="csv">CSV</button></div></div>
         <canvas id="chart-btcHoldings"></canvas>
       </div>
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>BTC Holdings Distribution</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="btcDistribution" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="btcDistribution" data-type="csv">CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel">
+        <div class="chart-header"><h3>BTC Distribution</h3><div class="chart-actions"><button class="btn-export" data-chart="btcDistribution" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="btcDistribution" data-type="csv">CSV</button></div></div>
         <canvas id="chart-btcDistribution"></canvas>
       </div>
     </div>
-
-    <div class="chart-row">
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>BTC Cost Basis vs Current Value</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="btcCostBasis" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="btcCostBasis" data-type="csv">CSV</button>
-          </div>
-        </div>
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
+        <div class="chart-header"><h3>Cost Basis vs Current Value</h3><div class="chart-actions"><button class="btn-export" data-chart="btcCostBasis" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="btcCostBasis" data-type="csv">CSV</button></div></div>
         <canvas id="chart-btcCostBasis"></canvas>
       </div>
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>BTC Holdings - Excluding MSTR</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="btcExMstr" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="btcExMstr" data-type="csv">CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel">
+        <div class="chart-header"><h3>BTC Holdings (ex-MSTR)</h3><div class="chart-actions"><button class="btn-export" data-chart="btcExMstr" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="btcExMstr" data-type="csv">CSV</button></div></div>
         <canvas id="chart-btcExMstr"></canvas>
       </div>
     </div>
-
     <div class="chart-row">
-      <div class="chart-container card full-width">
-        <div class="chart-header">
-          <h3>Bitcoin Treasury Companies Detail</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="btcTable" data-type="csv">Export CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel full-width">
+        <div class="chart-header"><h3>Bitcoin Treasury Detail</h3><div class="chart-actions"><button class="btn-export" data-chart="btcTable" data-type="csv">CSV</button></div></div>
         <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Ticker</th>
-                <th>Company</th>
-                <th class="num">BTC Held</th>
-                <th class="num">Avg Cost Basis</th>
-                <th class="num">Total Cost</th>
-                <th class="num">Current Value</th>
-                <th class="num">Unrealized P&L</th>
-                <th class="num">P&L %</th>
-                <th class="num">% of Total</th>
-              </tr>
-            </thead>
-            <tbody id="btcTableBody"></tbody>
-          </table>
+          <table class="data-table"><thead><tr><th>Ticker</th><th>Company</th><th class="num">BTC</th><th class="num">Avg Cost</th><th class="num">Total Cost</th><th class="num">Value</th><th class="num">P&L</th><th class="num">P&L %</th><th class="num">Share</th></tr></thead><tbody id="btcTableBody"></tbody></table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Ethereum Tab -->
+  <!-- ============ ETHEREUM ============ -->
   <div id="tab-ethereum" class="tab-content">
     <div class="summary-cards">
-      <div class="card summary-card eth">
-        <div class="card-label">Total ETH Held</div>
-        <div class="card-value" id="ethTotalHeld">--</div>
-      </div>
-      <div class="card summary-card eth">
-        <div class="card-label">ETH Price</div>
-        <div class="card-value" id="ethPrice">--</div>
-      </div>
-      <div class="card summary-card eth">
-        <div class="card-label">Total ETH Value</div>
-        <div class="card-value" id="ethTotalValue">--</div>
-      </div>
-      <div class="card summary-card eth">
-        <div class="card-label">Companies Holding ETH</div>
-        <div class="card-value" id="ethCompanyCount">--</div>
-      </div>
+      <div class="card summary-card eth"><div class="card-label">Total ETH Held</div><div class="card-value" id="ethTotalHeld">--</div></div>
+      <div class="card summary-card eth"><div class="card-label">ETH Price</div><div class="card-value" id="ethPrice">--</div></div>
+      <div class="card summary-card eth"><div class="card-label">Total ETH Value</div><div class="card-value" id="ethTotalValue">--</div></div>
+      <div class="card summary-card eth"><div class="card-label">Holders</div><div class="card-value" id="ethCompanyCount">--</div></div>
     </div>
-
-    <div class="chart-row">
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>ETH Holdings by Company</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="ethHoldings" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="ethHoldings" data-type="csv">CSV</button>
-          </div>
-        </div>
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
+        <div class="chart-header"><h3>ETH Holdings by Company</h3><div class="chart-actions"><button class="btn-export" data-chart="ethHoldings" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="ethHoldings" data-type="csv">CSV</button></div></div>
         <canvas id="chart-ethHoldings"></canvas>
       </div>
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>ETH Holdings Distribution</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="ethDistribution" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="ethDistribution" data-type="csv">CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel">
+        <div class="chart-header"><h3>ETH Distribution</h3><div class="chart-actions"><button class="btn-export" data-chart="ethDistribution" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="ethDistribution" data-type="csv">CSV</button></div></div>
         <canvas id="chart-ethDistribution"></canvas>
       </div>
     </div>
-
-    <div class="chart-row">
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>ETH Cost Basis vs Current Value</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="ethCostBasis" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="ethCostBasis" data-type="csv">CSV</button>
-          </div>
-        </div>
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
+        <div class="chart-header"><h3>Cost Basis vs Current Value</h3><div class="chart-actions"><button class="btn-export" data-chart="ethCostBasis" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="ethCostBasis" data-type="csv">CSV</button></div></div>
         <canvas id="chart-ethCostBasis"></canvas>
       </div>
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>ETH Holdings Value Over Time</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="ethOverTime" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="ethOverTime" data-type="csv">CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel">
+        <div class="chart-header"><h3>ETH Holdings Over Time</h3><div class="chart-actions"><button class="btn-export" data-chart="ethOverTime" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="ethOverTime" data-type="csv">CSV</button></div></div>
         <canvas id="chart-ethOverTime"></canvas>
       </div>
     </div>
-
     <div class="chart-row">
-      <div class="chart-container card full-width">
-        <div class="chart-header">
-          <h3>Ethereum Treasury Companies Detail</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="ethTable" data-type="csv">Export CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel full-width">
+        <div class="chart-header"><h3>Ethereum Treasury Detail</h3><div class="chart-actions"><button class="btn-export" data-chart="ethTable" data-type="csv">CSV</button></div></div>
         <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Ticker</th>
-                <th>Company</th>
-                <th class="num">ETH Held</th>
-                <th class="num">Avg Cost Basis</th>
-                <th class="num">Total Cost</th>
-                <th class="num">Current Value</th>
-                <th class="num">Unrealized P&L</th>
-                <th class="num">P&L %</th>
-                <th class="num">% of Total</th>
-              </tr>
-            </thead>
-            <tbody id="ethTableBody"></tbody>
-          </table>
+          <table class="data-table"><thead><tr><th>Ticker</th><th>Company</th><th class="num">ETH</th><th class="num">Avg Cost</th><th class="num">Total Cost</th><th class="num">Value</th><th class="num">P&L</th><th class="num">P&L %</th><th class="num">Share</th></tr></thead><tbody id="ethTableBody"></tbody></table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Solana Tab -->
+  <!-- ============ SOLANA ============ -->
   <div id="tab-solana" class="tab-content">
     <div class="summary-cards">
-      <div class="card summary-card sol">
-        <div class="card-label">Total SOL Held</div>
-        <div class="card-value" id="solTotalHeld">--</div>
-      </div>
-      <div class="card summary-card sol">
-        <div class="card-label">SOL Price</div>
-        <div class="card-value" id="solPrice">--</div>
-      </div>
-      <div class="card summary-card sol">
-        <div class="card-label">Total SOL Value</div>
-        <div class="card-value" id="solTotalValue">--</div>
-      </div>
-      <div class="card summary-card sol">
-        <div class="card-label">Companies Holding SOL</div>
-        <div class="card-value" id="solCompanyCount">--</div>
-      </div>
+      <div class="card summary-card sol"><div class="card-label">Total SOL Held</div><div class="card-value" id="solTotalHeld">--</div></div>
+      <div class="card summary-card sol"><div class="card-label">SOL Price</div><div class="card-value" id="solPrice">--</div></div>
+      <div class="card summary-card sol"><div class="card-label">Total SOL Value</div><div class="card-value" id="solTotalValue">--</div></div>
+      <div class="card summary-card sol"><div class="card-label">Holders</div><div class="card-value" id="solCompanyCount">--</div></div>
     </div>
-
-    <div class="chart-row">
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>SOL Holdings by Company</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="solHoldings" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="solHoldings" data-type="csv">CSV</button>
-          </div>
-        </div>
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
+        <div class="chart-header"><h3>SOL Holdings by Company</h3><div class="chart-actions"><button class="btn-export" data-chart="solHoldings" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="solHoldings" data-type="csv">CSV</button></div></div>
         <canvas id="chart-solHoldings"></canvas>
       </div>
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>SOL Holdings Distribution</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="solDistribution" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="solDistribution" data-type="csv">CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel">
+        <div class="chart-header"><h3>SOL Distribution</h3><div class="chart-actions"><button class="btn-export" data-chart="solDistribution" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="solDistribution" data-type="csv">CSV</button></div></div>
         <canvas id="chart-solDistribution"></canvas>
       </div>
     </div>
-
-    <div class="chart-row">
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>SOL Cost Basis vs Current Value</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="solCostBasis" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="solCostBasis" data-type="csv">CSV</button>
-          </div>
-        </div>
+    <div class="chart-row" style="margin-bottom:1px">
+      <div class="chart-panel">
+        <div class="chart-header"><h3>Cost Basis vs Current Value</h3><div class="chart-actions"><button class="btn-export" data-chart="solCostBasis" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="solCostBasis" data-type="csv">CSV</button></div></div>
         <canvas id="chart-solCostBasis"></canvas>
       </div>
-      <div class="chart-container card">
-        <div class="chart-header">
-          <h3>SOL Holdings Value Over Time</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="solOverTime" data-type="jpeg">JPEG</button>
-            <button class="btn btn-sm btn-export" data-chart="solOverTime" data-type="csv">CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel">
+        <div class="chart-header"><h3>SOL Holdings Over Time</h3><div class="chart-actions"><button class="btn-export" data-chart="solOverTime" data-type="jpeg">JPEG</button><button class="btn-export" data-chart="solOverTime" data-type="csv">CSV</button></div></div>
         <canvas id="chart-solOverTime"></canvas>
       </div>
     </div>
-
     <div class="chart-row">
-      <div class="chart-container card full-width">
-        <div class="chart-header">
-          <h3>Solana Treasury Companies Detail</h3>
-          <div class="chart-actions">
-            <button class="btn btn-sm btn-export" data-chart="solTable" data-type="csv">Export CSV</button>
-          </div>
-        </div>
+      <div class="chart-panel full-width">
+        <div class="chart-header"><h3>Solana Treasury Detail</h3><div class="chart-actions"><button class="btn-export" data-chart="solTable" data-type="csv">CSV</button></div></div>
         <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Ticker</th>
-                <th>Company</th>
-                <th class="num">SOL Held</th>
-                <th class="num">Avg Cost Basis</th>
-                <th class="num">Total Cost</th>
-                <th class="num">Current Value</th>
-                <th class="num">Unrealized P&L</th>
-                <th class="num">P&L %</th>
-                <th class="num">% of Total</th>
-              </tr>
-            </thead>
-            <tbody id="solTableBody"></tbody>
-          </table>
+          <table class="data-table"><thead><tr><th>Ticker</th><th>Company</th><th class="num">SOL</th><th class="num">Avg Cost</th><th class="num">Total Cost</th><th class="num">Value</th><th class="num">P&L</th><th class="num">P&L %</th><th class="num">Share</th></tr></thead><tbody id="solTableBody"></tbody></table>
         </div>
       </div>
     </div>
   </div>
 
   <footer class="footer">
-    <p>Data powered by <a href="https://massive.com" target="_blank">Massive.com</a> API (formerly Polygon.io). Treasury holdings data is illustrative and sourced from public filings.</p>
-    <p>Charts can be exported as JPEG images or CSV data using the buttons above each chart.</p>
+    Data powered by <a href="https://massive.com" target="_blank">Massive.com</a> API. Treasury holdings sourced from public filings.
   </footer>
 
   <div id="loading-overlay" class="loading-overlay hidden">
     <div class="spinner"></div>
-    <p>Loading data...</p>
+    <p style="color:var(--text-muted);font-size:11px">Loading...</p>
   </div>
 
   <div id="toast" class="toast hidden"></div>

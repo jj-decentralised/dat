@@ -23,18 +23,18 @@ const ExportUtils = {
     const ctx = tempCanvas.getContext('2d');
 
     // Dark background
-    ctx.fillStyle = '#1e2130';
+    ctx.fillStyle = '#101014';
     ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
     // Draw title
-    const chartContainer = canvas.closest('.chart-container');
+    const chartContainer = canvas.closest('.chart-panel');
     const title = chartContainer?.querySelector('h3')?.textContent || chartId;
-    ctx.fillStyle = '#e4e6eb';
-    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText(title, padding, 28);
+    ctx.fillStyle = '#e8e8ed';
+    ctx.font = 'bold 14px Inter, -apple-system, sans-serif';
+    ctx.fillText(title, padding, 26);
 
     // Draw timestamp
-    ctx.fillStyle = '#6b7280';
+    ctx.fillStyle = '#4a4a58';
     ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
     ctx.fillText('Treasury Analytics Dashboard | ' + new Date().toLocaleString(), padding, tempCanvas.height - 10);
 

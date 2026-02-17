@@ -10,32 +10,31 @@ const ChartManager = {
     maintainAspectRatio: true,
     plugins: {
       legend: {
-        labels: {
-          color: '#9ca3af',
-          font: { size: 11 },
-          boxWidth: 12,
-          padding: 12
-        }
+        display: false
       },
       tooltip: {
-        backgroundColor: '#1e2130',
-        titleColor: '#e4e6eb',
-        bodyColor: '#9ca3af',
-        borderColor: '#2a2d3a',
+        backgroundColor: '#101014',
+        titleColor: '#e8e8ed',
+        bodyColor: '#7a7a8a',
+        borderColor: '#1e1e28',
         borderWidth: 1,
-        padding: 10,
+        padding: 8,
+        titleFont: { size: 11 },
+        bodyFont: { size: 11 },
         displayColors: true,
+        boxWidth: 8,
+        boxHeight: 8,
         callbacks: {}
       }
     },
     scales: {
       x: {
-        ticks: { color: '#6b7280', font: { size: 10 } },
-        grid: { color: 'rgba(42, 45, 58, 0.5)' }
+        ticks: { color: '#4a4a58', font: { size: 10 } },
+        grid: { color: 'rgba(30, 30, 40, 0.6)', drawBorder: false }
       },
       y: {
-        ticks: { color: '#6b7280', font: { size: 10 } },
-        grid: { color: 'rgba(42, 45, 58, 0.5)' }
+        ticks: { color: '#4a4a58', font: { size: 10 } },
+        grid: { color: 'rgba(30, 30, 40, 0.6)', drawBorder: false }
       }
     }
   },
@@ -75,6 +74,113 @@ const ChartManager = {
       },
       scales: custom.scales || this.defaultOptions.scales
     };
+  },
+
+  // ============= MARKET CAP OVER TIME (HERO CHART) =============
+
+  renderMcapOverTime(barsData, companies, indexTo100) {
+    this.destroy('mcapOverTime');
+    const ctx = this._getCtx('mcapOverTime');
+    if (!ctx) return;
+
+    const tickers = Object.keys(barsData).filter(t => barsData[t].length > 1);
+    if (tickers.length === 0) return;
+
+    // Find longest series for labels
+    const longestTicker = tickers.reduce((a, b) =>
+      barsData[a].length >= barsData[b].length ? a : b
+    );
+    const labels = barsData[longestTicker].map(b =>
+      new Date(b.t).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    );
+
+    const datasets = tickers.map((ticker, i) => {
+      const bars = barsData[ticker];
+      const company = companies.find(c => c.ticker === ticker);
+      const shares = company?.sharesOutstanding || 1;
+
+      let data;
+      if (indexTo100) {
+        const base = bars[0]?.c || 1;
+        data = bars.map(b => (b.c / base) * 100);
+      } else {
+        data = bars.map(b => b.c * shares);
+      }
+
+      return {
+        label: ticker,
+        data,
+        borderColor: CHART_COLORS[i % CHART_COLORS.length],
+        backgroundColor: 'transparent',
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        tension: 0.3
+      };
+    });
+
+    this.charts['mcapOverTime'] = new Chart(ctx, {
+      type: 'line',
+      data: { labels, datasets },
+      options: this._mergeOptions({
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: (ctx) => {
+                const val = ctx.raw;
+                if (indexTo100) return ctx.dataset.label + ': ' + val.toFixed(1);
+                return ctx.dataset.label + ': ' + DataUtils.formatNumber(val);
+              }
+            }
+          }
+        },
+        interaction: { mode: 'index', intersect: false },
+        scales: {
+          x: {
+            ticks: { color: '#4a4a58', maxTicksLimit: 12, font: { size: 10 } },
+            grid: { color: 'rgba(20, 20, 24, 0.8)', drawBorder: false }
+          },
+          y: {
+            ticks: {
+              color: '#4a4a58',
+              font: { size: 10 },
+              callback: v => indexTo100 ? v.toFixed(0) : DataUtils.formatNumber(v)
+            },
+            grid: { color: 'rgba(20, 20, 24, 0.8)', drawBorder: false }
+          }
+        }
+      })
+    });
+
+    // Build custom legend
+    this._buildMcapLegend(tickers, datasets);
+  },
+
+  _buildMcapLegend(tickers, datasets) {
+    const container = document.getElementById('mcapLegend');
+    if (!container) return;
+    container.innerHTML = '';
+
+    tickers.forEach((ticker, i) => {
+      const item = document.createElement('span');
+      item.className = 'legend-item';
+      item.dataset.ticker = ticker;
+      item.innerHTML = `<span class="legend-dot" style="background:${CHART_COLORS[i % CHART_COLORS.length]}"></span>${ticker}`;
+
+      item.addEventListener('click', () => {
+        const chart = this.charts['mcapOverTime'];
+        if (!chart) return;
+        const ds = chart.data.datasets[i];
+        ds.hidden = !ds.hidden;
+        item.classList.toggle('dimmed', ds.hidden);
+        chart.update();
+      });
+
+      container.appendChild(item);
+    });
   },
 
   // ============= OVERVIEW TAB CHARTS =============
@@ -435,7 +541,7 @@ const ChartManager = {
         datasets: [{
           data: [btcVal, ethVal, solVal],
           backgroundColor: ['#f7931a', '#627eea', '#9945ff'],
-          borderColor: '#1e2130',
+          borderColor: '#101014',
           borderWidth: 3
         }]
       },
@@ -448,10 +554,10 @@ const ChartManager = {
             labels: { color: '#9ca3af', font: { size: 12 }, padding: 16 }
           },
           tooltip: {
-            backgroundColor: '#1e2130',
-            titleColor: '#e4e6eb',
-            bodyColor: '#9ca3af',
-            borderColor: '#2a2d3a',
+            backgroundColor: '#101014',
+            titleColor: '#e8e8ed',
+            bodyColor: '#7a7a8a',
+            borderColor: '#1e1e28',
             borderWidth: 1,
             callbacks: {
               label: (ctx) => {
@@ -727,7 +833,7 @@ const ChartManager = {
         datasets: [{
           data: main.map(d => d.quantity),
           backgroundColor: main.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
-          borderColor: '#1e2130',
+          borderColor: '#101014',
           borderWidth: 2
         }]
       },
@@ -740,10 +846,10 @@ const ChartManager = {
             labels: { color: '#9ca3af', font: { size: 11 }, padding: 8 }
           },
           tooltip: {
-            backgroundColor: '#1e2130',
-            titleColor: '#e4e6eb',
-            bodyColor: '#9ca3af',
-            borderColor: '#2a2d3a',
+            backgroundColor: '#101014',
+            titleColor: '#e8e8ed',
+            bodyColor: '#7a7a8a',
+            borderColor: '#1e1e28',
             borderWidth: 1,
             callbacks: {
               label: (ctx) => {
