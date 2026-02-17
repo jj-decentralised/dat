@@ -1,11 +1,8 @@
 /**
- * Export Module - JPEG and CSV export for all charts
+ * Export Module - JPEG and CSV export for all charts (Dark Theme)
  */
 
 const ExportUtils = {
-  /**
-   * Export a chart canvas as JPEG image
-   */
   exportChartAsJPEG(chartId, filename) {
     const chartInstance = ChartManager.charts[chartId];
     if (!chartInstance) {
@@ -14,7 +11,6 @@ const ExportUtils = {
     }
 
     const canvas = chartInstance.canvas;
-    // Create a temporary canvas with white background for JPEG
     const tempCanvas = document.createElement('canvas');
     const padding = 20;
     tempCanvas.width = canvas.width + padding * 2;
@@ -22,26 +18,25 @@ const ExportUtils = {
 
     const ctx = tempCanvas.getContext('2d');
 
-    // White background
-    ctx.fillStyle = '#ffffff';
+    // Dark background matching the dashboard theme
+    ctx.fillStyle = '#161820';
     ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
     // Draw title
-    const chartContainer = canvas.closest('.chart-panel');
-    const title = chartContainer?.querySelector('h3')?.textContent || chartId;
-    ctx.fillStyle = '#1a1d23';
+    const chartContainer = canvas.closest('.chart-card');
+    const title = chartContainer?.querySelector('.chart-title')?.textContent || chartId;
+    ctx.fillStyle = '#e8eaed';
     ctx.font = 'bold 14px Inter, -apple-system, sans-serif';
     ctx.fillText(title, padding, 26);
 
     // Draw timestamp
-    ctx.fillStyle = '#8b929e';
-    ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
-    ctx.fillText('Treasury Analytics Dashboard | ' + new Date().toLocaleString(), padding, tempCanvas.height - 10);
+    ctx.fillStyle = '#6b7080';
+    ctx.font = '11px Inter, -apple-system, sans-serif';
+    ctx.fillText('Blockworks Treasury Analytics | ' + new Date().toLocaleString(), padding, tempCanvas.height - 10);
 
     // Draw chart
     ctx.drawImage(canvas, padding, 40);
 
-    // Convert to JPEG and download
     tempCanvas.toBlob((blob) => {
       if (!blob) {
         App.showToast('Failed to generate image', 'error');
@@ -59,13 +54,9 @@ const ExportUtils = {
     }, 'image/jpeg', 0.95);
   },
 
-  /**
-   * Export chart data as CSV
-   */
   exportChartAsCSV(chartId, filename) {
     const chartInstance = ChartManager.charts[chartId];
     if (!chartInstance) {
-      // Check if it's a table export
       if (chartId.endsWith('Table')) {
         this.exportTableAsCSV(chartId, filename);
         return;
@@ -83,7 +74,6 @@ const ExportUtils = {
       return;
     }
 
-    // Build CSV
     const headers = ['Label', ...datasets.map(ds => ds.label || 'Value')];
     const rows = labels.map((label, i) => {
       const values = datasets.map(ds => {
@@ -98,9 +88,6 @@ const ExportUtils = {
     this._downloadCSV(headers, rows, filename || chartId);
   },
 
-  /**
-   * Export a table as CSV
-   */
   exportTableAsCSV(tableId, filename) {
     let tableBody, tableHead;
 
@@ -131,9 +118,6 @@ const ExportUtils = {
     this._downloadCSV(headers, rows, filename || tableId);
   },
 
-  /**
-   * Generate and download CSV content
-   */
   _downloadCSV(headers, rows, filename) {
     const csvContent = [
       headers.map(h => this._escapeCSV(h)).join(','),
