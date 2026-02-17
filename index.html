@@ -18,11 +18,11 @@
       <span class="logo-sub">Crypto Treasury Companies</span>
     </div>
     <div class="header-right">
-      <div class="api-key-section">
-        <label>API Key</label>
+      <span id="apiStatus" class="api-status preloaded">preloaded</span>
+      <button id="apiToggleBtn" class="btn btn-sm btn-ghost" title="Connect live API">API</button>
+      <div id="apiKeySection" class="api-key-section hidden">
         <input type="password" id="apiKeyInput" placeholder="massive.com key" />
         <button id="apiKeyBtn" class="btn btn-sm btn-primary">Connect</button>
-        <span id="apiStatus" class="api-status">offline</span>
       </div>
     </div>
   </header>
@@ -147,6 +147,7 @@
                 <th data-sort="btc" class="num">BTC</th>
                 <th data-sort="eth" class="num">ETH</th>
                 <th data-sort="sol" class="num">SOL</th>
+                <th data-sort="other" class="num">Other</th>
                 <th data-sort="cryptoNav" class="num">Crypto NAV</th>
                 <th data-sort="mnav" class="num">mNAV</th>
                 <th data-sort="premium" class="num">Premium</th>

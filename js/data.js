@@ -1,54 +1,64 @@
 /**
  * Treasury Companies Data Module
- * Holdings data sourced from public filings and disclosures.
+ * Holdings data sourced from public filings and disclosures (as of Feb 2026).
+ * Prices and holdings are preloaded snapshots; connect API for live updates.
  */
 
 const TREASURY_COMPANIES = [
-  { ticker: 'MSTR', name: 'Strategy (MicroStrategy)', sector: 'Software / BTC Treasury', holdings: { BTC: { quantity: 478740, avgCost: 65033 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 244890000 },
-  { ticker: 'BMNR', name: 'Bitmine', sector: 'Bitcoin Mining', holdings: { BTC: { quantity: 282, avgCost: 54000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 42000000 },
-  { ticker: 'XXI', name: 'Twenty One Capital', sector: 'BTC Treasury', holdings: { BTC: { quantity: 31500, avgCost: 72000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 195000000 },
-  { ticker: 'SBET', name: 'SharpLink Gaming', sector: 'Gaming / BTC Treasury', holdings: { BTC: { quantity: 88, avgCost: 60500 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 18500000 },
-  { ticker: 'ETHM', name: 'Ether Capital', sector: 'ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 32600, avgCost: 2300 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 98000000 },
-  { ticker: 'PURR', name: 'Purrfect Holdings', sector: 'BTC Treasury', holdings: { BTC: { quantity: 120, avgCost: 58000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 25000000 },
-  { ticker: 'BTBT', name: 'Bit Digital', sector: 'Bitcoin Mining', holdings: { BTC: { quantity: 730, avgCost: 33200 }, ETH: { quantity: 19518, avgCost: 2800 }, SOL: { quantity: 8200, avgCost: 110 } }, sharesOutstanding: 124900000 },
-  { ticker: 'ASST', name: 'Asset Entities', sector: 'Digital Media / BTC Treasury', holdings: { BTC: { quantity: 45, avgCost: 62000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 15000000 },
-  { ticker: 'FWDI', name: 'Forward Industries', sector: 'Manufacturing / BTC Treasury', holdings: { BTC: { quantity: 52, avgCost: 67000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 10200000 },
-  { ticker: 'MBAV', name: 'MiMedia', sector: 'Cloud / BTC Treasury', holdings: { BTC: { quantity: 26, avgCost: 70000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 8500000 },
-  { ticker: 'FGNX', name: 'Futuregen Holdings', sector: 'BTC Treasury', holdings: { BTC: { quantity: 35, avgCost: 66000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 12000000 },
-  { ticker: 'CEPO', name: 'CryptoEnterprise Portfolio', sector: 'Crypto Investment', holdings: { BTC: { quantity: 210, avgCost: 48000 }, ETH: { quantity: 4500, avgCost: 2500 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 35000000 },
-  { ticker: 'BRR', name: 'BRR ETF / Crypto Holdings', sector: 'Crypto ETP', holdings: { BTC: { quantity: 950, avgCost: 55000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 28000000 },
-  { ticker: 'BNC', name: 'BNC Capital', sector: 'BTC Treasury', holdings: { BTC: { quantity: 175, avgCost: 61000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 22000000 },
-  { ticker: 'NAKA', name: 'Nakamoto Holdings', sector: 'BTC Treasury', holdings: { BTC: { quantity: 420, avgCost: 58000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 48000000 },
-  { ticker: 'DFDV', name: 'DeFi Development Corp', sector: 'Solana Ecosystem', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 317381, avgCost: 130 } }, sharesOutstanding: 32400000 },
-  { ticker: 'SUIG', name: 'SUI Global', sector: 'Crypto Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 5000, avgCost: 2200 }, SOL: { quantity: 15000, avgCost: 120 } }, sharesOutstanding: 20000000 },
-  { ticker: 'SLMT', name: 'SolidMint Corp', sector: 'BTC Treasury', holdings: { BTC: { quantity: 68, avgCost: 64000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 14000000 },
-  { ticker: 'HSDT', name: 'Heliogen / HashData Tech', sector: 'Bitcoin Mining', holdings: { BTC: { quantity: 380, avgCost: 42000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 55000000 },
-  { ticker: 'BTCS', name: 'BTCS Inc', sector: 'Blockchain Infrastructure', holdings: { BTC: { quantity: 78, avgCost: 38500 }, ETH: { quantity: 12835, avgCost: 2400 }, SOL: { quantity: 3500, avgCost: 85 } }, sharesOutstanding: 16200000 },
-  { ticker: 'ETHZ', name: 'ETH Zurich Capital', sector: 'ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 18000, avgCost: 2100 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 30000000 },
-  { ticker: 'SQNS', name: 'Sequans Communications', sector: 'Semiconductor / BTC Treasury', holdings: { BTC: { quantity: 42, avgCost: 71000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 65000000 },
-  { ticker: 'UPXI', name: 'Upexi', sector: 'Solana Ecosystem', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 595000, avgCost: 145 } }, sharesOutstanding: 45000000 },
-  { ticker: 'STSS', name: 'Sharps Technology', sector: 'Healthcare / BTC Treasury', holdings: { BTC: { quantity: 30, avgCost: 68000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 9500000 },
-  { ticker: 'HYPD', name: 'Hyped Company', sector: 'BTC Treasury', holdings: { BTC: { quantity: 55, avgCost: 63000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 18000000 },
-  { ticker: 'WGRX', name: 'WagerX', sector: 'Gaming / Crypto Treasury', holdings: { BTC: { quantity: 40, avgCost: 59000 }, ETH: { quantity: 2000, avgCost: 2600 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 12000000 },
-  { ticker: 'STKE', name: 'Stake Holdings', sector: 'BTC Treasury', holdings: { BTC: { quantity: 150, avgCost: 56000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 28000000 },
-  { ticker: 'GAME', name: 'GameSquare Holdings', sector: 'Gaming / BTC Treasury', holdings: { BTC: { quantity: 95, avgCost: 61000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 42000000 },
-  { ticker: 'VVPR', name: 'VivoPower International', sector: 'Energy / BTC Treasury', holdings: { BTC: { quantity: 38, avgCost: 65000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 8500000 },
-  { ticker: 'BNKK', name: 'BankK Holdings', sector: 'BTC Treasury', holdings: { BTC: { quantity: 85, avgCost: 60000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 20000000 },
-  { ticker: 'PAPL', name: 'Pineapple Financial', sector: 'Fintech / BTC Treasury', holdings: { BTC: { quantity: 22, avgCost: 72000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 7500000 },
-  { ticker: 'SLAI', name: 'Sievert Larsen AI', sector: 'AI / BTC Treasury', holdings: { BTC: { quantity: 60, avgCost: 67000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 15000000 },
-  { ticker: 'WETO', name: 'WeTrade Group', sector: 'Fintech / BTC Treasury', holdings: { BTC: { quantity: 18, avgCost: 69000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 35000000 },
-  { ticker: 'IPST', name: 'iPost Corp', sector: 'Tech / BTC Treasury', holdings: { BTC: { quantity: 25, avgCost: 64000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 11000000 },
-  { ticker: 'SBLX', name: 'SubLux Holdings', sector: 'BTC Treasury', holdings: { BTC: { quantity: 33, avgCost: 66000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 9000000 },
-  { ticker: 'NVVE', name: 'Nuvve Holding', sector: 'Energy / BTC Treasury', holdings: { BTC: { quantity: 15, avgCost: 71000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 12500000 },
-  { ticker: 'LGHL', name: 'Lion Group Holding', sector: 'Fintech / BTC Treasury', holdings: { BTC: { quantity: 110, avgCost: 55000 }, ETH: { quantity: 3000, avgCost: 2400 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 45000000 },
+  // ========== BTC Treasury Companies ==========
+  { ticker: 'MSTR', name: 'Strategy (MicroStrategy)', sector: 'Software / BTC Treasury', holdings: { BTC: { quantity: 714644, avgCost: 76056 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 500000000 },
+  { ticker: 'XXI', name: 'Twenty One Capital', sector: 'BTC Treasury', holdings: { BTC: { quantity: 43514, avgCost: 72000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 346500000 },
+  { ticker: 'ASST', name: 'Strive Inc', sector: 'Asset Management / BTC Treasury', holdings: { BTC: { quantity: 13132, avgCost: 68819 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 63100000 },
+  { ticker: 'NAKA', name: 'Nakamoto Inc', sector: 'Healthcare / BTC Treasury', holdings: { BTC: { quantity: 5398, avgCost: 82000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 160000000 },
+  { ticker: 'BRR', name: 'ProCap Financial', sector: 'BTC Treasury', holdings: { BTC: { quantity: 5000, avgCost: 73000 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 85000000 },
+  { ticker: 'SQNS', name: 'Sequans Communications', sector: 'Semiconductor / BTC Treasury', holdings: { BTC: { quantity: 2687, avgCost: 116643 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 14500000 },
+  { ticker: 'LGHL', name: 'Lion Group Holding', sector: 'Fintech / Multi-Crypto', holdings: { BTC: { quantity: 88, avgCost: 90404 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 10820, avgCost: 140 } }, sharesOutstanding: 540000 },
+
+  // ========== ETH Treasury Companies ==========
+  { ticker: 'BMNR', name: 'Bitmine Immersion', sector: 'ETH Treasury', holdings: { BTC: { quantity: 193, avgCost: 54000 }, ETH: { quantity: 4285125, avgCost: 2991 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 454860000 },
+  { ticker: 'SBET', name: 'Sharplink Inc', sector: 'ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 864840, avgCost: 3609 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 196690000 },
+  { ticker: 'ETHM', name: 'The Ether Machine', sector: 'ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 496712, avgCost: 3200 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 22130000 },
+  { ticker: 'BTBT', name: 'Bit Digital', sector: 'ETH Treasury / AI', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 155239, avgCost: 3045 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 324000000 },
+  { ticker: 'ETHZ', name: 'ETHZilla Corp', sector: 'ETH Treasury / DeFi', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 102326, avgCost: 2800 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 18000000 },
+  { ticker: 'BTCS', name: 'BTCS Inc', sector: 'Blockchain / ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 70140, avgCost: 2441 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 47500000 },
+  { ticker: 'FGNX', name: 'FG Nexus', sector: 'Holding Co / ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 50000, avgCost: 2600 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 35000000 },
+  { ticker: 'GAME', name: 'GameSquare Holdings', sector: 'Gaming / ETH Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 15600, avgCost: 3519 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 98380000 },
+
+  // ========== SOL Treasury Companies ==========
+  { ticker: 'HSDT', name: 'Solana Company', sector: 'SOL Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 2300000, avgCost: 135 } }, sharesOutstanding: 41300000 },
+  { ticker: 'DFDV', name: 'DeFi Development Corp', sector: 'SOL Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 2221329, avgCost: 108 } }, sharesOutstanding: 29890000 },
+  { ticker: 'UPXI', name: 'Upexi', sector: 'SOL Treasury / Consumer', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 2174583, avgCost: 151 } }, sharesOutstanding: 69760000 },
+  { ticker: 'STSS', name: 'Sharps Technology', sector: 'Healthcare / SOL Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 2000000, avgCost: 145 } }, sharesOutstanding: 62000000 },
+  { ticker: 'STKE', name: 'SOL Strategies', sector: 'SOL Infrastructure', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 435159, avgCost: 95 } }, sharesOutstanding: 50000000 },
+  { ticker: 'FWDI', name: 'Forward Industries', sector: 'Design / SOL Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 125000, avgCost: 140 } }, sharesOutstanding: 10200000 },
+  { ticker: 'SLAI', name: 'SOLAI Limited', sector: 'Mining / SOL Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 44412, avgCost: 130 } }, sharesOutstanding: 18680000 },
+  { ticker: 'SLMT', name: 'Solmate Infrastructure', sector: 'SOL Validator / Infra', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 35000, avgCost: 120 } }, sharesOutstanding: 90100000 },
+
+  // ========== Other Crypto Treasury Companies ==========
+  { ticker: 'PURR', name: 'Hyperliquid Strategies', sector: 'HYPE Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 150600000, otherHoldings: { token: 'HYPE', quantity: 17600000, avgCost: 18.60 } },
+  { ticker: 'SUIG', name: 'SUI Group Holdings', sector: 'SUI Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 127000000, otherHoldings: { token: 'SUI', quantity: 101795656, avgCost: 2.50 } },
+  { ticker: 'BNC', name: 'CEA Industries', sector: 'BNB Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 43000000, otherHoldings: { token: 'BNB', quantity: 500000, avgCost: 870 } },
+  { ticker: 'HYPD', name: 'Hyperion DeFi', sector: 'HYPE Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 25000000, otherHoldings: { token: 'HYPE', quantity: 800000, avgCost: 20.00 } },
+  { ticker: 'WGRX', name: 'Wellgistics Health', sector: 'Healthcare / XRP Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 102000000, otherHoldings: { token: 'XRP', quantity: 10000000, avgCost: 2.20 } },
+  { ticker: 'VVPR', name: 'VivoPower International', sector: 'Energy / XRP Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 12530000, otherHoldings: { token: 'XRP', quantity: 5000000, avgCost: 2.10 } },
+  { ticker: 'BNKK', name: 'Bonk Inc', sector: 'BONK Treasury / Beverages', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 8000000, otherHoldings: { token: 'BONK', quantity: 500000000000, avgCost: 0.000008 } },
+  { ticker: 'PAPL', name: 'Pineapple Financial', sector: 'Mortgage / INJ Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 24600000, otherHoldings: { token: 'INJ', quantity: 7200000, avgCost: 5.00 } },
+  { ticker: 'IPST', name: 'Heritage Distilling', sector: 'Spirits / IP Treasury', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 85000000, otherHoldings: { token: 'IP', quantity: 53200000, avgCost: 3.50 } },
+  { ticker: 'SBLX', name: 'StableX Technologies', sector: 'Stablecoin Infra', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 1450000, otherHoldings: { token: 'LINK', quantity: 100000, avgCost: 15.00 } },
+
+  // ========== SPACs / Pre-Merger / Minimal Holdings ==========
+  { ticker: 'CEPO', name: 'Cantor Equity Partners I', sector: 'SPAC (Pre-Acquisition)', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 20000000 },
+  { ticker: 'MBAV', name: 'M3-Brigade / ReserveOne', sector: 'SPAC (BTC Planned)', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 35700000 },
+  { ticker: 'NVVE', name: 'Nuvve Holding', sector: 'V2G Energy / Crypto', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 1325000 },
+  { ticker: 'WETO', name: 'Webus International', sector: 'TravelTech', holdings: { BTC: { quantity: 0, avgCost: 0 }, ETH: { quantity: 0, avgCost: 0 }, SOL: { quantity: 0, avgCost: 0 } }, sharesOutstanding: 26000000 },
 ];
 
-// Historical holdings snapshots (quarterly)
+// Historical holdings snapshots (quarterly) - aggregate across all tracked companies
 const HOLDINGS_HISTORY = {
   dates: ['2023-Q1', '2023-Q2', '2023-Q3', '2023-Q4', '2024-Q1', '2024-Q2', '2024-Q3', '2024-Q4', '2025-Q1', '2025-Q2', '2025-Q3', '2025-Q4', '2026-Q1'],
-  aggregateBTC: [180000, 200000, 225000, 260000, 300000, 340000, 380000, 420000, 460000, 500000, 530000, 560000, 580000],
-  aggregateETH: [50000, 60000, 70000, 85000, 100000, 120000, 135000, 155000, 168000, 175000, 180000, 185000, 190000],
-  aggregateSOL: [20000, 40000, 80000, 150000, 250000, 380000, 520000, 680000, 800000, 880000, 950000, 1010000, 1050000]
+  aggregateBTC: [140000, 155000, 170000, 190000, 215000, 252000, 280000, 350000, 450000, 530000, 620000, 700000, 784656],
+  aggregateETH: [48000, 55000, 62000, 70000, 85000, 110000, 180000, 350000, 850000, 2200000, 3800000, 5400000, 6039982],
+  aggregateSOL: [0, 0, 5000, 25000, 80000, 200000, 500000, 1200000, 2800000, 5500000, 7800000, 8800000, 9346303]
 };
 
 const CHART_COLORS = [

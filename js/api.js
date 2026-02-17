@@ -1,5 +1,6 @@
 /**
  * Massive.com API Client (formerly Polygon.io)
+ * API key is optional - dashboard works fully with preloaded data.
  */
 
 const MassiveAPI = {
@@ -118,28 +119,70 @@ const MassiveAPI = {
   }
 };
 
-const FALLBACK_PRICES = { BTC: 97500, ETH: 2750, SOL: 195 };
+// Accurate fallback crypto prices (Feb 2026)
+const FALLBACK_PRICES = { BTC: 69400, ETH: 2300, SOL: 110 };
 
-// Generate fallback snapshot for any ticker
-function _makeFallbackSnap(price, vol) {
-  const change = (Math.random() - 0.4) * 4;
-  return { day: { c: price, v: vol, o: price * (1 - change / 100) }, prevDay: { c: price * (1 - change / 100) }, todaysChangePerc: change };
+// Accurate fallback stock snapshots from public market data (Feb 2026)
+function _makeFallbackSnap(price, vol, changePerc) {
+  const prevClose = price / (1 + changePerc / 100);
+  return {
+    day: { c: price, v: vol, o: prevClose },
+    prevDay: { c: prevClose },
+    todaysChangePerc: changePerc
+  };
 }
 
 const FALLBACK_SNAPSHOTS = {};
+// [price, avg_volume, daily_change_%]
 const _SNAP_PRICES = {
-  MSTR: [388.50, 18500000], BMNR: [2.15, 1200000], XXI: [45.80, 3500000], SBET: [1.85, 950000],
-  ETHM: [3.20, 800000], PURR: [1.10, 600000], BTBT: [3.45, 4200000], ASST: [0.85, 500000],
-  FWDI: [1.95, 350000], MBAV: [0.55, 280000], FGNX: [1.40, 420000], CEPO: [4.80, 1100000],
-  BRR: [8.50, 2200000], BNC: [2.60, 780000], NAKA: [6.20, 1800000], DFDV: [12.40, 650000],
-  SUIG: [3.10, 550000], SLMT: [1.75, 380000], HSDT: [2.90, 1600000], BTCS: [2.80, 1500000],
-  ETHZ: [4.50, 900000], SQNS: [1.20, 2100000], UPXI: [8.75, 1200000], STSS: [0.65, 300000],
-  HYPD: [1.30, 450000], WGRX: [2.10, 520000], STKE: [3.80, 680000], GAME: [1.90, 1400000],
-  VVPR: [1.45, 350000], BNKK: [2.25, 600000], PAPL: [0.95, 250000], SLAI: [1.70, 400000],
-  WETO: [0.75, 550000], IPST: [1.15, 320000], SBLX: [1.50, 280000], NVVE: [0.90, 420000],
-  LGHL: [1.60, 880000]
+  // BTC Treasury
+  MSTR: [120.00, 18000000, -1.85],
+  XXI:  [6.55, 3500000, -0.76],
+  ASST: [8.70, 2500000, +0.58],
+  NAKA: [0.30, 8000000, -3.23],
+  BRR:  [2.37, 2200000, -1.25],
+  SQNS: [3.30, 2100000, -2.34],
+  LGHL: [1.90, 880000, +1.06],
+
+  // ETH Treasury
+  BMNR: [21.20, 12000000, -2.10],
+  SBET: [6.85, 5000000, -1.44],
+  ETHM: [10.34, 2000000, +0.49],
+  BTBT: [1.76, 4200000, -0.56],
+  ETHZ: [3.50, 900000, -1.13],
+  BTCS: [1.65, 1500000, +0.61],
+  FGNX: [3.06, 420000, -0.65],
+  GAME: [0.30, 1400000, -2.94],
+
+  // SOL Treasury
+  HSDT: [3.46, 1600000, -1.71],
+  DFDV: [3.89, 650000, +1.31],
+  UPXI: [1.00, 1200000, -2.91],
+  STSS: [4.50, 800000, -0.88],
+  STKE: [1.99, 680000, +0.51],
+  FWDI: [8.00, 350000, -1.23],
+  SLAI: [0.85, 400000, -1.16],
+  SLMT: [1.21, 380000, +0.83],
+
+  // Other Crypto Treasury
+  PURR: [4.50, 600000, +2.30],
+  SUIG: [1.21, 550000, -1.64],
+  BNC:  [4.52, 780000, -0.88],
+  HYPD: [1.30, 450000, +1.57],
+  WGRX: [0.35, 520000, -4.11],
+  VVPR: [1.63, 350000, -0.61],
+  BNKK: [2.25, 600000, +3.21],
+  PAPL: [0.73, 250000, -1.35],
+  IPST: [3.50, 320000, +0.86],
+  SBLX: [2.46, 280000, -0.40],
+
+  // SPACs / Pre-Merger
+  CEPO: [10.44, 500000, +0.10],
+  MBAV: [10.70, 280000, +0.19],
+  NVVE: [1.39, 420000, -2.10],
+  WETO: [0.51, 550000, -3.77]
 };
-Object.entries(_SNAP_PRICES).forEach(([t, [p, v]]) => { FALLBACK_SNAPSHOTS[t] = _makeFallbackSnap(p, v); });
+Object.entries(_SNAP_PRICES).forEach(([t, [p, v, ch]]) => { FALLBACK_SNAPSHOTS[t] = _makeFallbackSnap(p, v, ch); });
 
 function generateSimulatedBars(ticker, days) {
   const bars = [];

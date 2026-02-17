@@ -61,6 +61,11 @@ const App = {
 
   // ========== API KEY ==========
   setupApiKey() {
+    const toggleBtn = document.getElementById('apiToggleBtn');
+    const section = document.getElementById('apiKeySection');
+    if (toggleBtn && section) {
+      toggleBtn.addEventListener('click', () => section.classList.toggle('hidden'));
+    }
     document.getElementById('apiKeyBtn').addEventListener('click', () =>
       this.connectAPI(document.getElementById('apiKeyInput').value.trim()));
     document.getElementById('apiKeyInput').addEventListener('keydown', (e) => {
@@ -81,8 +86,9 @@ const App = {
       }
       status.textContent = 'live'; status.className = 'api-status connected';
       localStorage.setItem('massive_api_key', key);
+      document.getElementById('apiKeySection').classList.add('hidden');
       await this.loadLiveData();
-      this.showToast('Connected', 'success');
+      this.showToast('Connected to live data', 'success');
     } catch (e) {
       status.textContent = 'error';
       this.showToast(e.message, 'error');
@@ -206,6 +212,9 @@ const App = {
       const premiumPct = nav > 0 ? ((mcap - nav) / nav) * 100 : 0;
       const change = snap?.todaysChangePerc || 0;
       const tr = document.createElement('tr');
+      const otherStr = c.otherHoldings
+        ? DataUtils.formatCount(c.otherHoldings.quantity) + ' ' + c.otherHoldings.token
+        : '-';
       tr.innerHTML = `
         <td>${c.ticker}</td>
         <td>${c.name}</td>
@@ -215,6 +224,7 @@ const App = {
         <td class="num">${c.holdings.BTC.quantity > 0 ? DataUtils.formatCount(c.holdings.BTC.quantity) : '-'}</td>
         <td class="num">${c.holdings.ETH.quantity > 0 ? DataUtils.formatCount(c.holdings.ETH.quantity) : '-'}</td>
         <td class="num">${c.holdings.SOL.quantity > 0 ? DataUtils.formatCount(c.holdings.SOL.quantity) : '-'}</td>
+        <td class="num">${otherStr}</td>
         <td class="num">${DataUtils.formatNumber(nav)}</td>
         <td class="num">${mnavVal > 0 ? mnavVal.toFixed(2) + 'x' : '--'}</td>
         <td class="num ${premiumPct >= 0 ? 'positive' : 'negative'}">${DataUtils.formatPercent(premiumPct)}</td>
@@ -226,7 +236,7 @@ const App = {
   // ========== MARKET DATA ==========
   populateMarketSelects() {
     const select = document.getElementById('marketCompanySelect');
-    const defaults = ['MSTR', 'XXI', 'BTBT', 'DFDV', 'NAKA'];
+    const defaults = ['MSTR', 'BMNR', 'SBET', 'DFDV', 'HSDT'];
     TREASURY_COMPANIES.forEach(c => {
       const opt = document.createElement('option');
       opt.value = c.ticker;

@@ -74,6 +74,11 @@ a { color: var(--accent); text-decoration: none; }
 .header-right {
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+.hidden {
+  display: none !important;
 }
 
 .api-key-section {
@@ -116,6 +121,10 @@ a { color: var(--accent); text-decoration: none; }
   color: var(--green);
 }
 
+.api-status.preloaded {
+  color: var(--accent);
+}
+
 /* === Buttons === */
 .btn {
   background: var(--bg-elevated);
@@ -148,6 +157,17 @@ a { color: var(--accent); text-decoration: none; }
 
 .btn-primary:hover {
   background: #4a7cd8;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 .btn-export {
