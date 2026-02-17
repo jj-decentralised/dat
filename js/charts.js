@@ -13,10 +13,10 @@ const ChartManager = {
         display: false
       },
       tooltip: {
-        backgroundColor: '#101014',
-        titleColor: '#e8e8ed',
-        bodyColor: '#7a7a8a',
-        borderColor: '#1e1e28',
+        backgroundColor: '#ffffff',
+        titleColor: '#1a1d23',
+        bodyColor: '#5c6370',
+        borderColor: '#e2e5e9',
         borderWidth: 1,
         padding: 8,
         titleFont: { size: 11 },
@@ -29,12 +29,12 @@ const ChartManager = {
     },
     scales: {
       x: {
-        ticks: { color: '#4a4a58', font: { size: 10 } },
-        grid: { color: 'rgba(30, 30, 40, 0.6)', drawBorder: false }
+        ticks: { color: '#8b929e', font: { size: 10 } },
+        grid: { color: 'rgba(226, 229, 233, 0.6)', drawBorder: false }
       },
       y: {
-        ticks: { color: '#4a4a58', font: { size: 10 } },
-        grid: { color: 'rgba(30, 30, 40, 0.6)', drawBorder: false }
+        ticks: { color: '#8b929e', font: { size: 10 } },
+        grid: { color: 'rgba(226, 229, 233, 0.6)', drawBorder: false }
       }
     }
   },
@@ -140,16 +140,16 @@ const ChartManager = {
         interaction: { mode: 'index', intersect: false },
         scales: {
           x: {
-            ticks: { color: '#4a4a58', maxTicksLimit: 12, font: { size: 10 } },
-            grid: { color: 'rgba(20, 20, 24, 0.8)', drawBorder: false }
+            ticks: { color: '#8b929e', maxTicksLimit: 12, font: { size: 10 } },
+            grid: { color: 'rgba(226, 229, 233, 0.6)', drawBorder: false }
           },
           y: {
             ticks: {
-              color: '#4a4a58',
+              color: '#8b929e',
               font: { size: 10 },
               callback: v => indexTo100 ? v.toFixed(0) : DataUtils.formatNumber(v)
             },
-            grid: { color: 'rgba(20, 20, 24, 0.8)', drawBorder: false }
+            grid: { color: 'rgba(226, 229, 233, 0.6)', drawBorder: false }
           }
         }
       })
@@ -232,14 +232,14 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280', font: { size: 10 } }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e', font: { size: 10 } }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               font: { size: 10 },
               callback: v => DataUtils.formatNumber(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -293,11 +293,11 @@ const ChartManager = {
         },
         scales: {
           x: {
-            ticks: { color: '#6b7280', callback: v => v.toFixed(1) + 'x' },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            ticks: { color: '#8b929e', callback: v => v.toFixed(1) + 'x' },
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           },
           y: {
-            ticks: { color: '#9ca3af', font: { size: 10 } },
+            ticks: { color: '#5c6370', font: { size: 10 } },
             grid: { display: false }
           }
         }
@@ -355,16 +355,16 @@ const ChartManager = {
         interaction: { mode: 'index', intersect: false },
         scales: {
           x: {
-            ticks: { color: '#6b7280', maxTicksLimit: 10, font: { size: 10 } },
+            ticks: { color: '#8b929e', maxTicksLimit: 10, font: { size: 10 } },
             grid: { display: false }
           },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               font: { size: 10 },
               callback: v => v.toFixed(0)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -407,13 +407,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatCount(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -455,13 +455,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatNumber(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -514,10 +514,10 @@ const ChartManager = {
         },
         scales: {
           x: {
-            ticks: { color: '#6b7280', callback: v => v.toFixed(0) + '%' },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            ticks: { color: '#8b929e', callback: v => v.toFixed(0) + '%' },
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           },
-          y: { ticks: { color: '#9ca3af', font: { size: 10 } }, grid: { display: false } }
+          y: { ticks: { color: '#5c6370', font: { size: 10 } }, grid: { display: false } }
         }
       })
     });
@@ -541,7 +541,7 @@ const ChartManager = {
         datasets: [{
           data: [btcVal, ethVal, solVal],
           backgroundColor: ['#f7931a', '#627eea', '#9945ff'],
-          borderColor: '#101014',
+          borderColor: '#ffffff',
           borderWidth: 3
         }]
       },
@@ -551,13 +551,13 @@ const ChartManager = {
         plugins: {
           legend: {
             position: 'bottom',
-            labels: { color: '#9ca3af', font: { size: 12 }, padding: 16 }
+            labels: { color: '#5c6370', font: { size: 12 }, padding: 16 }
           },
           tooltip: {
-            backgroundColor: '#101014',
-            titleColor: '#e8e8ed',
-            bodyColor: '#7a7a8a',
-            borderColor: '#1e1e28',
+            backgroundColor: '#ffffff',
+            titleColor: '#1a1d23',
+            bodyColor: '#5c6370',
+            borderColor: '#e2e5e9',
             borderWidth: 1,
             callbacks: {
               label: (ctx) => {
@@ -614,13 +614,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280', font: { size: 10 } }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e', font: { size: 10 } }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => v.toFixed(0) + '%'
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -676,16 +676,16 @@ const ChartManager = {
         scales: {
           x: {
             stacked: true,
-            ticks: { color: '#6b7280' },
+            ticks: { color: '#8b929e' },
             grid: { display: false }
           },
           y: {
             stacked: true,
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatNumber(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -742,13 +742,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatCount(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -792,13 +792,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatCount(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -833,7 +833,7 @@ const ChartManager = {
         datasets: [{
           data: main.map(d => d.quantity),
           backgroundColor: main.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]),
-          borderColor: '#101014',
+          borderColor: '#ffffff',
           borderWidth: 2
         }]
       },
@@ -843,13 +843,13 @@ const ChartManager = {
         plugins: {
           legend: {
             position: 'right',
-            labels: { color: '#9ca3af', font: { size: 11 }, padding: 8 }
+            labels: { color: '#5c6370', font: { size: 11 }, padding: 8 }
           },
           tooltip: {
-            backgroundColor: '#101014',
-            titleColor: '#e8e8ed',
-            bodyColor: '#7a7a8a',
-            borderColor: '#1e1e28',
+            backgroundColor: '#ffffff',
+            titleColor: '#1a1d23',
+            bodyColor: '#5c6370',
+            borderColor: '#e2e5e9',
             borderWidth: 1,
             callbacks: {
               label: (ctx) => {
@@ -906,13 +906,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatNumber(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -951,13 +951,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatCount(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })
@@ -1001,13 +1001,13 @@ const ChartManager = {
           }
         },
         scales: {
-          x: { ticks: { color: '#6b7280' }, grid: { display: false } },
+          x: { ticks: { color: '#8b929e' }, grid: { display: false } },
           y: {
             ticks: {
-              color: '#6b7280',
+              color: '#8b929e',
               callback: v => DataUtils.formatCount(v)
             },
-            grid: { color: 'rgba(42, 45, 58, 0.5)' }
+            grid: { color: 'rgba(226, 229, 233, 0.5)' }
           }
         }
       })

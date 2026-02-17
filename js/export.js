@@ -22,19 +22,19 @@ const ExportUtils = {
 
     const ctx = tempCanvas.getContext('2d');
 
-    // Dark background
-    ctx.fillStyle = '#101014';
+    // White background
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
     // Draw title
     const chartContainer = canvas.closest('.chart-panel');
     const title = chartContainer?.querySelector('h3')?.textContent || chartId;
-    ctx.fillStyle = '#e8e8ed';
+    ctx.fillStyle = '#1a1d23';
     ctx.font = 'bold 14px Inter, -apple-system, sans-serif';
     ctx.fillText(title, padding, 26);
 
     // Draw timestamp
-    ctx.fillStyle = '#4a4a58';
+    ctx.fillStyle = '#8b929e';
     ctx.font = '11px -apple-system, BlinkMacSystemFont, sans-serif';
     ctx.fillText('Treasury Analytics Dashboard | ' + new Date().toLocaleString(), padding, tempCanvas.height - 10);
 

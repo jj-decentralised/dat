@@ -6,23 +6,23 @@
 }
 
 :root {
-  --bg-body: #050507;
-  --bg-surface: #0c0c10;
-  --bg-card: #101014;
-  --bg-elevated: #16161c;
-  --bg-hover: #1c1c24;
-  --border: #1e1e28;
-  --border-subtle: #141418;
-  --text-primary: #e8e8ed;
-  --text-secondary: #7a7a8a;
-  --text-muted: #4a4a58;
-  --accent: #5b8def;
-  --accent-dim: rgba(91, 141, 239, 0.12);
-  --green: #3ecf8e;
-  --green-dim: rgba(62, 207, 142, 0.12);
-  --red: #f45b69;
-  --red-dim: rgba(244, 91, 105, 0.12);
-  --orange: #f0a83a;
+  --bg-body: #ffffff;
+  --bg-surface: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-elevated: #f1f3f5;
+  --bg-hover: #f1f3f5;
+  --border: #e2e5e9;
+  --border-subtle: #eef0f2;
+  --text-primary: #1a1d23;
+  --text-secondary: #5c6370;
+  --text-muted: #8b929e;
+  --accent: #2563eb;
+  --accent-dim: rgba(37, 99, 235, 0.08);
+  --green: #16a34a;
+  --green-dim: rgba(22, 163, 74, 0.08);
+  --red: #dc2626;
+  --red-dim: rgba(220, 38, 38, 0.08);
+  --orange: #d97706;
   --btc: #f7931a;
   --eth: #627eea;
   --sol: #9945ff;
@@ -132,7 +132,7 @@ a { color: var(--accent); text-decoration: none; }
 .btn:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
-  border-color: #2a2a36;
+  border-color: #ccd0d5;
 }
 
 .btn-sm {
@@ -496,7 +496,7 @@ canvas {
 .loading-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(5, 5, 7, 0.9);
+  background: rgba(255, 255, 255, 0.85);
   display: flex;
   flex-direction: column;
   align-items: center;
